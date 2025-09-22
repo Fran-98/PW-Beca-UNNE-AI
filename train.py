@@ -68,5 +68,3 @@ if __name__ == '__main__':
         assert output_surface.shape == (1, 4, 721, 1440)
     except Exception as e:
         print(f"Sanity Check Failed: {e}")
-        print("Note: The model uses placeholders (e.g., for EarthAttention3D).")
-        print("A complete implementation is required for the model to be fully functional.")

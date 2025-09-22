@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import numpy as np
 from timm.models.layers import DropPath, trunc_normal_
 
 
@@ -44,12 +43,12 @@ def get_model_path(lead_time):
 
 class MLP(nn.Module):
     """Multi Layer Perceptron"""
-    def __init__(self, in_features, act_layer=nn.GELU, drop=0.0):
+    def __init__(self, in_features, hidden_features=4, act_layer=nn.GELU, drop=0.0):
         super().__init__()
         
-        self.fc1 = nn.Linear(in_features, in_features * 4)
+        self.fc1 = nn.Linear(in_features, hidden_features)
         self.act = act_layer()
-        self.fc2 = nn.Linear(in_features * 4, in_features)
+        self.fc2 = nn.Linear(hidden_features, in_features)
         self.drop = nn.Dropout(drop)
 
     def forward(self, x):
@@ -480,7 +479,8 @@ class PanguModel(nn.Module):
         x = x.view(B, Z, H_up, W_up, C)
         x = x[:, :, :H_orig, :W_orig, :].contiguous() # Recortamos a las dimensiones originales
 
-        
+        x = x.view(B, -1, C) # Aplanar de nuevo a 3D
+
         # Layer 4
         # Ahora H y W deben ser las originales para esta capa
         x = self.layer4(x, Z, H_orig, W_orig)
