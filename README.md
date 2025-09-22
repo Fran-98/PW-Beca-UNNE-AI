@@ -1,5 +1,6 @@
 # PW-Beca-UNNE-AI
 
-´´´bash
+```bash
 pip install torch torchvision timm
-´´´
+```
+
